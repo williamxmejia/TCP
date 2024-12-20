@@ -19,8 +19,6 @@ type Server struct {
 	msgch chan Message
 }
 
-
-
 func NewServer(listenAddr string) *Server {
 	return &Server{
 		listenAddr: listenAddr,
@@ -61,6 +59,7 @@ func (s *Server) acceptLoop() {
 
 func (s *Server) readLoop(conn net.Conn) {
 	defer conn.Close()
+	var messageToSend string
 	buf := make([]byte, 2048)
 	for {
 		n, err := conn.Read(buf)
@@ -73,8 +72,11 @@ func (s *Server) readLoop(conn net.Conn) {
 			from: conn.RemoteAddr().String(),
 			payload: buf[:n],
 		}
+		
+		fmt.Scanln(&messageToSend)
+		conn.Write([] byte(messageToSend))
 
-		conn.Write([] byte("Thank you for your message!\n"))
+		//conn.Write([] byte("Thank you for your message!\n"))
 	}
 }
 
@@ -88,6 +90,7 @@ func main() {
 			msg.from, string(msg.payload))
 		}
 	}()
+
 
 	log.Fatal(server.Start())
 }
