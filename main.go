@@ -57,9 +57,10 @@ func (s *Server) acceptLoop() {
 	}
 }
 
+
 func (s *Server) readLoop(conn net.Conn) {
 	defer conn.Close()
-	var messageToSend string
+	var message string
 	buf := make([]byte, 2048)
 	for {
 		n, err := conn.Read(buf)
@@ -73,10 +74,18 @@ func (s *Server) readLoop(conn net.Conn) {
 			payload: buf[:n],
 		}
 		
-		fmt.Scanln(&messageToSend)
-		conn.Write([] byte(messageToSend))
+		fmt.Println("What would you like to reply?")
+		fmt.Scan(&message)
+		//message = "Hello world"
 
-		//conn.Write([] byte("Thank you for your message!\n"))
+		for _, word := range message {
+			_, err = conn.Write([]byte(string(word)))
+			if err != nil {
+				fmt.Println("Error writing:", err)
+			}
+		}
+
+		conn.Write([] byte("\n"))
 	}
 }
 
