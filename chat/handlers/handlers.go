@@ -14,3 +14,7 @@ func (a *AppHandler) HandleGetIndex(ctx *fiber.Ctx) error {
 	context := fiber.Map{}
 	return ctx.Render("index", context)
 }
+
+func TestHandler(ctx *fiber.Ctx) error {
+	return ctx.SendString("Testing")
+}
