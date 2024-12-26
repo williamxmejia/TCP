@@ -16,6 +16,8 @@ func main() {
 		Views: engine,
 	})
 
+	app.Static("static", "./static")
+
 	app.Get("/", func(ctx *fiber.Ctx) error {
 		var tracker Tracker
 		tracker.Count = 0
@@ -30,6 +32,7 @@ func main() {
 			"Count": tracker.Count,
 		})
 	})
+
 	
 	app.Listen(":3000")
 

@@ -3,24 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My HTMX Page</title>
+    <title>Home</title>
     <script src="https://unpkg.com/htmx.org"></script>
+		<link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>{{.Title}}</h1>
-    <p>{{.Message}}</p>
-		<p>{{.Count}}</p>
-
-    <!-- HTMX example -->
-    <button 
-        hx-get="/example-endpoint" 
-        hx-target="#response"
-        hx-swap="innerHTML">
-        Click Me to Load Content
-    </button>
-
-    <div id="response">
-        <!-- This area will be updated dynamically by HTMX -->
-    </div>
+	<div>
+		<nav>
+			<h1>Home</h1>
+			<form action="/search" method="GET">
+        <input type="text" name="query" placeholder="Search for crypto" required>
+        <button type="submit">Search</button>
+			</form>
+		</nav>
+	</div>
 </body>
 </html>
