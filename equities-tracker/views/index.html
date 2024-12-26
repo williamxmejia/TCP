@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My HTMX Page</title>
+    <script src="https://unpkg.com/htmx.org"></script>
+</head>
+<body>
+    <h1>{{.Title}}</h1>
+    <p>{{.Message}}</p>
+		<p>{{.Count}}</p>
+
+    <!-- HTMX example -->
+    <button 
+        hx-get="/example-endpoint" 
+        hx-target="#response"
+        hx-swap="innerHTML">
+        Click Me to Load Content
+    </button>
+
+    <div id="response">
+        <!-- This area will be updated dynamically by HTMX -->
+    </div>
+</body>
+</html>
