@@ -11,6 +11,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
+	"github.com/joho/godotenv"
 )
 
 type Tracker struct {
@@ -24,6 +25,13 @@ type EquityInfo struct {
 
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	key := os.Getenv("API_KEY")
+
 	client := &http.Client{}
 	engine := html.New("./views", ".html")
 
@@ -40,7 +48,7 @@ func main() {
 	q.Add("convert", "USD")
 
 	req.Header.Set("Accepts", "application/json")
-  req.Header.Add("X-CMC_PRO_API_KEY", "b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c")
+  req.Header.Add("X-CMC_PRO_API_KEY", key)
   req.URL.RawQuery = q.Encode()
 
 
@@ -143,7 +151,9 @@ func main() {
 		})
 	})
 
+	port := os.Getenv("PORT")
+
 	
-	app.Listen(":3000")
+	app.Listen(":" + port)
 
 }
