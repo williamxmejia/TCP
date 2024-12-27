@@ -17,6 +17,11 @@ type Tracker struct {
 	Count int
 }
 
+type EquityInfo struct {
+	Name string
+	Symbol string
+}
+
 
 func main() {
 	client := &http.Client{}
@@ -56,7 +61,6 @@ func main() {
 	}
 
 	data := result.(map[string]interface{})["data"].([]interface{})
-	data2 := data[1].(map[string]interface{})
 
 	fmt.Println("api response(interface):")
 
@@ -70,10 +74,10 @@ func main() {
 		var tracker Tracker
 		tracker.Count = 0
 
-		//var keyItems []string
-		//var valueItems []string
+		//fmt.Println(data2)
 
-		fmt.Println(data2["cmc_rank"])
+		/*
+
 		multiMap := map[string]map[string]int{
         "fruits": {
             "apple":  5,
@@ -85,33 +89,57 @@ func main() {
             "potato": 7,
         },
     }
+		*/
 
 		fmt.Println()
 		fmt.Println()
 		
-		fmt.Println(multiMap["fruits"]["apple"])
+		//fmt.Println(multiMap["fruits"]["apple"])
 
 		/*
 		var count int
+		*/
+		//var name []string
+		//var symbol []string
+
+		info := []EquityInfo{}
+
 		
-		for key, value := range data {
-			//keyItems = append(keyItems, key) 
-			//valueItems =  append(valueItems, value)
+		for key, _ := range data {
+			data2 := data[key].(map[string]interface{})
+			/*
+			*/
+			if data3, ok := data2["name"].(string); ok {
+				if symbol, ok := data2["symbol"].(string); ok {
+					info = append(info, EquityInfo{Name: data3, Symbol: symbol})
+				} else {
+					fmt.Println("failed")
+				}
+				//fmt.Println(data3)
+			} else {
+				fmt.Println("failed")
+			}
+			
+			//info = append(info, EquityInfo{Name: data2["name"], Symbol: data2["symbol"]})
+			//symbol =  append(symbol, data2["symbol"])
 			//count += 1
-			fmt.Printf("%d: %v\n", key, value)
+			//fmt.Printf("Name:%s, symbol:%s\n", data2["name"], data2["symbol"])
+			//fmt.Printf("Name:%s, symbol:%s\n", data3, data3)
 			//fmt.Println(count)
 		}
-		*/
 
 		for i := 0; i < 5; i++ {
 			tracker.Count += 1
 		}
+		fmt.Println(info[1].Name)
+		fmt.Println(info[1].Symbol)
 
 		return ctx.Render("index", fiber.Map{
 			"Title": "Fiber",
 			"Message": "Dynamic view",
 			"Count": tracker.Count,
-			//"respBody": valueItems,
+			"Name": info[1].Name,
+			"Symbol": info[1].Symbol,
 		})
 	})
 
