@@ -6,4 +6,32 @@ body {
 nav {
 	display: flex;
 	justify-content: space-between;
+	border-bottom: 1px solid white;
 }
+
+footer {
+	display: flex;
+	border-top: 1px solid white;
+	position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: white;
+  text-align: center;
+}
+
+ul {
+	list-style: none;
+}
+
+img {
+	width: 200px;
+	height: 200px;
+}
+
+#abc123 {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
