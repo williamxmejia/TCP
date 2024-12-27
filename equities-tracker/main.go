@@ -31,6 +31,7 @@ func main() {
 	}
 
 	key := os.Getenv("API_KEY")
+	port := os.Getenv("PORT")
 
 	client := &http.Client{}
 	engine := html.New("./views", ".html")
@@ -59,7 +60,6 @@ func main() {
   }
   fmt.Println(resp.Status);
   respBody, _ := ioutil.ReadAll(resp.Body)
-  //fmt.Println(string(respBody))
 
 	var result interface{}
 
@@ -79,51 +79,23 @@ func main() {
 	app.Static("static", "./static")
 
 	app.Get("/", func(ctx *fiber.Ctx) error {
+		info := []EquityInfo{}
 		var tracker Tracker
 		tracker.Count = 0
 
-		//fmt.Println(data2)
-
-		/*
-
-		multiMap := map[string]map[string]int{
-        "fruits": {
-            "apple":  5,
-            "banana": 10,
-            "cherry": 15,
-        },
-        "vegetables": {
-            "carrot": 3,
-            "potato": 7,
-        },
-    }
-		*/
-
-		fmt.Println()
 		fmt.Println()
 		
-		//fmt.Println(multiMap["fruits"]["apple"])
 
-		/*
-		var count int
-		*/
-		//var name []string
-		//var symbol []string
-
-		info := []EquityInfo{}
-
-		
 		for key, _ := range data {
 			data2 := data[key].(map[string]interface{})
 			/*
 			*/
-			if data3, ok := data2["name"].(string); ok {
+			if name, ok := data2["name"].(string); ok {
 				if symbol, ok := data2["symbol"].(string); ok {
-					info = append(info, EquityInfo{Name: data3, Symbol: symbol})
+					info = append(info, EquityInfo{Name: name, Symbol: symbol})
 				} else {
 					fmt.Println("failed")
 				}
-				//fmt.Println(data3)
 			} else {
 				fmt.Println("failed")
 			}
@@ -151,7 +123,6 @@ func main() {
 		})
 	})
 
-	port := os.Getenv("PORT")
 
 	
 	app.Listen(":" + port)
