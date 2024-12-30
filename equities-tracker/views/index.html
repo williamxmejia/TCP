@@ -11,8 +11,8 @@
 	<div>
 		<nav>
 			<h1>Home</h1>
-			<form action="/search" method="GET">
-        <input type="text" name="query" placeholder="Search for crypto" required>
+			<form hx-get="/search" method="GET" on:submit="false">
+        <input type="text" name="query" placeholder="Search for crypto">
         <button type="submit">Search</button>
 			</form>
 		</nav>
@@ -41,5 +41,8 @@
 			</ul>
 		</footer>
 	</div>
+	<script>
+		console.log("Testing")
+	</script>
 </body>
 </html>

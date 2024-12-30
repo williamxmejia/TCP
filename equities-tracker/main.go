@@ -18,9 +18,16 @@ type Tracker struct {
 	Count int
 }
 
+type Quote struct {
+	Price float64
+	MarketCap float64
+	LastUpdated string
+}
+
 type EquityInfo struct {
 	Name string
 	Symbol string
+	//Quote Quote
 }
 
 
@@ -36,7 +43,9 @@ func main() {
 	client := &http.Client{}
 	engine := html.New("./views", ".html")
 
-	req, err := http.NewRequest("GET","https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest", nil)
+	//req, err := http.NewRequest("GET","https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest", nil)
+
+	req, err := http.NewRequest("GET","https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest", nil)
 
 	if err != nil {
 		log.Print(err)
@@ -69,8 +78,10 @@ func main() {
 	}
 
 	data := result.(map[string]interface{})["data"].([]interface{})
+	quote := data[1].(map[string]interface{})["quote"].(map[string]interface{})["USD"].(map[string]interface{})["price"]
 
 	fmt.Println("api response(interface):")
+	fmt.Println(quote)
 
 	app := fiber.New(fiber.Config{
 		Views: engine,
@@ -93,6 +104,7 @@ func main() {
 			if name, ok := data2["name"].(string); ok {
 				if symbol, ok := data2["symbol"].(string); ok {
 					info = append(info, EquityInfo{Name: name, Symbol: symbol})
+					//fmt.Println(data2["quote"])
 				} else {
 					fmt.Println("failed")
 				}
@@ -113,6 +125,7 @@ func main() {
 		}
 		fmt.Println(info[1].Name)
 		fmt.Println(info[1].Symbol)
+		//fmt.Println(info[1].Quote
 
 		return ctx.Render("index", fiber.Map{
 			"Title": "Fiber",
@@ -120,7 +133,16 @@ func main() {
 			"Count": tracker.Count,
 			"Name": info[1].Name,
 			"Symbol": info[1].Symbol,
+			//"Quote": info[1].Quote,
 		})
+
+	})
+
+	app.Get("/search", func(ctx *fiber.Ctx) error {
+		input := ctx.FormValue("query")
+		response := fmt.Sprintf("You typed: %s", input)
+		fmt.Println(response)
+		return ctx.SendString(response)
 	})
 
 
