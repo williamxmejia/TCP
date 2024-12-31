@@ -27,7 +27,7 @@ type Quote struct {
 type EquityInfo struct {
 	Name string
 	Symbol string
-	//Quote Quote
+	Quote Quote
 }
 
 
@@ -78,10 +78,9 @@ func main() {
 	}
 
 	data := result.(map[string]interface{})["data"].([]interface{})
-	quote := data[1].(map[string]interface{})["quote"].(map[string]interface{})["USD"].(map[string]interface{})["price"]
 
 	fmt.Println("api response(interface):")
-	fmt.Println(quote)
+	//fmt.Println(quote.(map[string]interface{})["price"])
 
 	app := fiber.New(fiber.Config{
 		Views: engine,
@@ -91,51 +90,40 @@ func main() {
 
 	app.Get("/", func(ctx *fiber.Ctx) error {
 		info := []EquityInfo{}
-		var tracker Tracker
-		tracker.Count = 0
-
-		fmt.Println()
-		
 
 		for key, _ := range data {
 			data2 := data[key].(map[string]interface{})
-			/*
-			*/
+			quote := data2["quote"].(map[string]interface{})["USD"].(map[string]interface{})
 			if name, ok := data2["name"].(string); ok {
 				if symbol, ok := data2["symbol"].(string); ok {
-					info = append(info, EquityInfo{Name: name, Symbol: symbol})
-					//fmt.Println(data2["quote"])
-				} else {
-					fmt.Println("failed")
+					if price, ok := quote["price"].(float64); ok {
+						if marketCap, ok := quote["market_cap"].(float64); ok {
+							if lastUpdate, ok := quote["last_updated"].(string); ok {
+								info = append(info, EquityInfo{
+									Name: name, 
+									Symbol: symbol, 
+									Quote: Quote{
+										Price: price,
+										MarketCap: marketCap,
+										LastUpdated: lastUpdate,
+									},
+								})
+							} else {
+								fmt.Println("failed")
+							}
+						}
+					}
 				}
-			} else {
-				fmt.Println("failed")
 			}
-			
-			//info = append(info, EquityInfo{Name: data2["name"], Symbol: data2["symbol"]})
-			//symbol =  append(symbol, data2["symbol"])
-			//count += 1
-			//fmt.Printf("Name:%s, symbol:%s\n", data2["name"], data2["symbol"])
-			//fmt.Printf("Name:%s, symbol:%s\n", data3, data3)
-			//fmt.Println(count)
 		}
-
-		for i := 0; i < 5; i++ {
-			tracker.Count += 1
-		}
-		fmt.Println(info[1].Name)
-		fmt.Println(info[1].Symbol)
-		//fmt.Println(info[1].Quote
 
 		return ctx.Render("index", fiber.Map{
 			"Title": "Fiber",
 			"Message": "Dynamic view",
-			"Count": tracker.Count,
-			"Name": info[1].Name,
-			"Symbol": info[1].Symbol,
-			//"Quote": info[1].Quote,
+			"BTC": info[0],
+			"ETH": info[1],
+			//"Quote": info[i].Quote,
 		})
-
 	})
 
 	app.Get("/search", func(ctx *fiber.Ctx) error {

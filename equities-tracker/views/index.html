@@ -17,13 +17,25 @@
 			</form>
 		</nav>
 		<div id="abc123">
-			<img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg">
-			<img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Eth-diamond-rainbow.png">
-			<img src="https://upload.wikimedia.org/wikipedia/en/5/53/Shiba_Inu_coin_logo.png">
-		</div>
-		<div>
-			<p>Name: {{.Name}}</p>
-			<p>Symbol: {{.Symbol}}</p>
+			<div>
+				<img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg">
+				<div>
+					<p>Name: {{.BTC.Name}}</p>
+					<p>Symbol: {{.BTC.Symbol}}</p>
+					<p>Price: {{.BTC.Quote.Price}}</p>
+				</div>
+			</div>
+			<div>
+				<img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Eth-diamond-rainbow.png">
+				<div>
+					<p>Name: {{.ETH.Name}}</p>
+					<p>Symbol: {{.ETH.Symbol}}</p>
+					<p>Price: {{.ETH.Quote.Price}}</p>
+				</div>
+			</div>
+			<div>
+				<img src="https://upload.wikimedia.org/wikipedia/en/5/53/Shiba_Inu_coin_logo.png">
+			</div>
 		</div>
 		<footer>
 			<ul>
